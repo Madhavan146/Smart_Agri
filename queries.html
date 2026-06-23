@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmerHelper - Support Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #f1f8e9 100%);
+            --glass-bg: rgba(255, 255, 255, 0.55);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --primary-green: #2e7d32;
+            --text-main: #1b5e20;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--bg-gradient); color: var(--text-main); min-height: 100vh; padding: 2rem 1.5rem; display: flex; justify-content: center; align-items: center; }
+        
+        .glass-card {
+            width: 100%; max-width: 600px; background: var(--glass-bg); backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px); border: 1px solid var(--glass-border); border-radius: 24px;
+            padding: 2.5rem; box-shadow: 0 8px 32px 0 rgba(0,0,0,0.05); animation: fadeInUp 0.5s ease-out;
+        }
+
+        h2 { margin-bottom: 1.5rem; border-left: 4px solid var(--primary-green); padding-left: 0.5rem; font-size: 1.35rem; }
+        
+        .form-group { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.25rem; }
+        label { font-weight: 600; font-size: 0.9rem; }
+        
+        .form-control {
+            width: 100%; background: rgba(255,255,255,0.5); border: 1px solid var(--glass-border);
+            border-radius: 12px; padding: 0.9rem; font-size: 1rem; color: var(--text-main); outline: none; transition: 0.3s;
+        }
+        .form-control:focus { background: rgba(255,255,255,0.85); border-color: var(--primary-green); }
+
+        .btn-submit {
+            background: linear-gradient(135deg, var(--primary-green), #43a047); color: white;
+            border: none; padding: 1rem; border-radius: 12px; font-weight: 600; width: 100%; cursor: pointer; transition: 0.3s;
+        }
+        .btn-submit:hover { transform: translateY(-2px); }
+        
+        .success-banner { display: none; background: rgba(200,230,201,0.7); border: 1px solid var(--primary-green); padding: 1rem; border-radius: 12px; margin-top: 1rem; text-align: center; font-weight: 600; }
+        
+        .lang-toggle { position: absolute; top: 1rem; right: 1rem; background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 0.4rem 0.8rem; border-radius: 20px; font-weight: 600; cursor: pointer; }
+
+        @keyframes fadeInUp { from { opacity:0; transform:translateY(15px); } to { opacity:1; transform:translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <button class="lang-toggle" id="langToggle">தமிழ்</button>
+
+    <div class="glass-card">
+        <h2 id="titleQuery" data-key="titleQuery">Submit Your Inquiry to Agricultural Advisors</h2>
+        
+        <form id="queryForm">
+            <div class="form-group">
+                <label for="qSubject" id="lblSubject" data-key="lblSubject">Subject Topic</label>
+                <input type="text" id="qSubject" class="form-control" placeholder="e.g., Pest problem, fertilizer doubt" required>
+            </div>
+            <div class="form-group">
+                <label for="qBody" id="lblBody" data-key="lblBody">Detailed Explanation</label>
+                <textarea id="qBody" class="form-control" rows="5" placeholder="Describe your field issue clearly..." required></textarea>
+            </div>
+            <button type="submit" class="btn-submit" id="btnSubmitQuery" data-key="btnSubmitQuery">Transmit Query Securely</button>
+        </form>
+
+        <div class="success-banner" id="successBanner" data-key="msgSuccess">
+            ✓ Inquiry saved successfully. Our admin team will respond shortly via dashboard updates!
+        </div>
+    </div>
+
+    <script>
+        const dictionary = {
+            en: {
+                titleQuery: "Submit Your Inquiry to Agricultural Advisors",
+                lblSubject: "Subject Topic", lblBody: "Detailed Explanation",
+                btnSubmitQuery: "Transmit Query Securely",
+                msgSuccess: "✓ Inquiry saved successfully. Our admin team will respond shortly!"
+            },
+            ta: {
+                titleQuery: "உங்கள் விவசாய கேள்விகளை அனுப்பவும்",
+                lblSubject: "கேள்வியின் தலைப்பு", lblBody: "விளக்கம்",
+                btnSubmitQuery: "கேள்வியை சமர்ப்பிக்கவும்",
+                msgSuccess: "✓ உங்கள் கேள்வி வெற்றிகரமாக அனுப்பப்பட்டது. அதிகாரிகள் விரைவில் பதிலளிப்பார்கள்!"
+            }
+        };
+
+        let currentLang = localStorage.getItem('farmerLang') || 'en';
+
+        function applyTranslations() {
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (dictionary[currentLang][key]) el.textContent = dictionary[currentLang][key];
+            });
+            document.getElementById('langToggle').textContent = currentLang === 'en' ? 'தமிழ்' : 'English';
+        }
+
+        document.getElementById('langToggle').addEventListener('click', () => {
+            currentLang = currentLang === 'en' ? 'ta' : 'en';
+            localStorage.setItem('farmerLang', currentLang);
+            applyTranslations();
+        });
+
+        applyTranslations();
+
+        document.getElementById('queryForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Push query into shared dynamic cache database layer so admin.html reads it instantly
+            const currentQueries = JSON.parse(localStorage.getItem('farmerQueries') || '[]');
+            currentQueries.push({
+                subject: document.getElementById('qSubject').value,
+                body: document.getElementById('qBody').value,
+                timestamp: new Date().toLocaleTimeString(),
+                status: "Pending Review"
+            });
+            localStorage.setItem('farmerQueries', JSON.stringify(currentQueries));
+
+            document.getElementById('successBanner').style.display = 'block';
+            document.getElementById('queryForm').reset();
+        });
+    </script>
+</body>
+</html>

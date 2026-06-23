@@ -1,0 +1,180 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmerHelper - Admin Control Suite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #f1f8e9 100%);
+            --glass-bg: rgba(255, 255, 255, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.45);
+            --primary-green: #2e7d32;
+            --accent-yellow: #fff9c4;
+            --accent-orange: #ffe082;
+            --text-main: #1b5e20;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--bg-gradient); color: var(--text-main); min-height: 100vh; padding: 2rem; }
+        
+        .admin-container { max-width: 1200px; margin: 0 auto; }
+        
+        header {
+            background: var(--glass-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border); border-radius: 16px; padding: 1.2rem 2rem;
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;
+        }
+
+        .lang-btn { background: var(--primary-green); color: white; border: none; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; cursor: pointer; }
+
+        .metrics-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .metric-box { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 1.5rem; text-align: center; backdrop-filter: blur(10px); }
+        .metric-num { font-size: 2rem; font-weight: 700; color: var(--primary-green); margin-top: 0.5rem; }
+
+        .dashboard-split { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        .panel-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 2rem; backdrop-filter: blur(12px); min-height: 350px; }
+        
+        h2 { font-size: 1.25rem; margin-bottom: 1.25rem; border-bottom: 2px solid var(--glass-border); padding-bottom: 0.5rem; }
+
+        .query-item { background: rgba(255,255,255,0.4); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
+        .query-meta { display: flex; justify-content: space-between; font-size: 0.8rem; color: #558b2f; margin-top: 0.5rem; }
+        
+        .badge-pending { background: var(--accent-orange); padding: 0.2rem 0.6rem; border-radius: 10px; font-weight: 600; font-size: 0.75rem; }
+
+        @media (max-width: 900px) { .dashboard-split { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <div class="admin-container">
+        <header>
+            <div style="font-weight: 700; font-size: 1.4rem;">⚙️ Admin Intelligence Control Terminal</div>
+            <button class="lang-btn" id="langToggle">தமிழ்</button>
+        </header>
+
+        <div class="metrics-row">
+            <div class="metric-box">
+                <div data-key="mTotalUsers">Total Platform Enrolled Users</div>
+                <div class="metric-num" id="userCountDisplay">11</div>
+            </div>
+            <div class="metric-box" style="background: var(--accent-yellow);">
+                <div data-key="mPopularCrop">Trending Crop Optimal</div>
+                <div class="metric-num" id="trendingCropDisplay">Paddy Rice (🌾)</div>
+            </div>
+            <div class="metric-box">
+                <div data-key="mTopDistrict">Highest Activity District</div>
+                <div class="metric-num" id="activeDistrictDisplay">Thanjavur</div>
+            </div>
+        </div>
+
+        <div class="dashboard-split">
+            <div class="panel-card">
+                <h2 data-key="hRegionalAnalytics">Regional Macro-Analytics</h2>
+                <ul style="list-style: none; display:flex; flex-direction:column; gap:0.75rem;">
+                    <li><strong>Thanjavur Zone:</strong> High density crop parameters monitored running this hour.</li>
+                    <li><strong>Tiruvarur Zone:</strong> High demand indicators signaling agricultural rotations.</li>
+                    <li><strong>Coimbatore Edge:</strong> Groundnut monitoring indices expanding steadily.</li>
+                    <li><strong>Madurai Market Hub:</strong> Stable moisture report distributions confirmed.</li>
+                </ul>
+            </div>
+
+            <div class="panel-card">
+                <h2 data-key="hFarmerDesk">Incoming Farmers Query Management Desk</h2>
+                <div id="adminQueriesContainer">
+                    <p style="color: #558b2f; text-align: center; margin-top: 2rem;">No new queries reported from fields currently.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const dictionary = {
+            en: {
+                mTotalUsers: "Total Platform Enrolled Users", mPopularCrop: "Trending Crop Optimal",
+                mTopDistrict: "Highest Activity District", hRegionalAnalytics: "Regional Macro-Analytics",
+                hFarmerDesk: "Incoming Farmers Query Management Desk"
+            },
+            ta: {
+                mTotalUsers: "மொத்த பதிவு செய்த விவசாயிகள்", mPopularCrop: "அதிகம் தேர்ந்தெடுக்கப்பட்ட பயிர்",
+                mTopDistrict: "அதிக செயல்பாடுகள் உள்ள மாவட்டம்", hRegionalAnalytics: "மண்டல அளவிலான விவசாய பகுப்பாய்வு",
+                hFarmerDesk: "விவசாயிகளின் கேள்விகள் மேலாண்மை பிரிவு"
+            }
+        };
+
+        let currentLang = localStorage.getItem('farmerLang') || 'en';
+
+        function applyTranslations() {
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (dictionary[currentLang][key]) el.textContent = dictionary[currentLang][key];
+            });
+            document.getElementById('langToggle').textContent = currentLang === 'en' ? 'தமிழ்' : 'English';
+        }
+
+        document.getElementById('langToggle').addEventListener('click', () => {
+            currentLang = currentLang === 'en' ? 'ta' : 'en';
+            localStorage.setItem('farmerLang', currentLang);
+            applyTranslations();
+        });
+
+        applyTranslations();
+
+        // --- DYNAMIC LIVE COUNTER ENGINE ---
+        function calculateLiveMetrics() {
+            // Read registration submission tracking from user setup operations
+            let registrations = parseInt(localStorage.getItem('farmerRegistrationsCount') || '0');
+            
+            // Set default baseline configuration value to 11 as requested
+            let baseDefaultCount = 11;
+            let finalTrueUserCount = baseDefaultCount + registrations;
+            
+            // Update the UI component with calculated values
+            document.getElementById('userCountDisplay').textContent = finalTrueUserCount.toLocaleString();
+
+            // Pull interactive live crops parameters from user execution if active
+            const liveCrop = localStorage.getItem('selectedCropEn');
+            const liveIcon = localStorage.getItem('selectedCropIcon');
+            if (liveCrop && liveIcon) {
+                document.getElementById('trendingCropDisplay').textContent = `${liveCrop} (${liveIcon})`;
+            }
+
+            // Pull live active district parameters
+            const liveDistrict = localStorage.getItem('selectedDistrict');
+            if (liveDistrict) {
+                document.getElementById('activeDistrictDisplay').textContent = liveDistrict;
+            }
+        }
+
+        // Render dynamic incoming support items generated inside queries.html
+        function loadQueries() {
+            const container = document.getElementById('adminQueriesContainer');
+            const data = JSON.parse(localStorage.getItem('farmerQueries') || '[]');
+            
+            if(data.length > 0) {
+                container.innerHTML = '';
+                data.reverse().forEach(q => {
+                    const box = document.createElement('div');
+                    box.className = 'query-item';
+                    box.innerHTML = `
+                        <div style="font-weight:700;">${q.subject}</div>
+                        <div style="font-size:0.9rem; margin-top:0.25rem; color:#424242;">${q.body}</div>
+                        <div class="query-meta">
+                            <span>🕒 Received: ${q.timestamp}</span>
+                            <span class="badge-pending">${q.status}</span>
+                        </div>
+                    `;
+                    container.appendChild(box);
+                });
+            }
+        }
+
+        // Initialize counters on interface load
+        calculateLiveMetrics();
+        loadQueries();
+    </script>
+</body>
+</html>

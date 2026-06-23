@@ -1,0 +1,420 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmerHelper - Login / Signup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- DESIGN SYSTEM DEFINITIONS & GLASSMORPHIC PRIMITIVES --- */
+        :root {
+            --bg-gradient: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #f1f8e9 100%);
+            --glass-bg: rgba(255, 255, 255, 0.55);
+            --glass-bg-hover: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --glass-shadow: 0 8px 32px 0 rgba(139, 195, 74, 0.15);
+            --primary-green: #2e7d32;
+            --accent-orange: #ff9800;
+            --accent-yellow: #fff59d;
+            --text-main: #1b5e20;
+            --text-sub: #33691e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        header {
+            width: 100%;
+            max-width: 450px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--glass-shadow);
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+      .brand {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary-green);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+      .lang-btn {
+            background: var(--primary-green);
+            color: #ffffff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(46, 125, 50, 0.2);
+        }
+
+      .lang-btn:hover {
+            transform: translateY(-1px);
+            background: #1b5e20;
+        }
+
+      .auth-card {
+            width: 100%;
+            max-width: 450px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem 2rem;
+            box-shadow: var(--glass-shadow);
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+      .tab-group {
+            display: flex;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 12px;
+            padding: 0.35rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--glass-border);
+        }
+
+      .tab-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 0.75rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-sub);
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+      .tab-btn.active {
+            background: #ffffff;
+            color: var(--primary-green);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+      .form-pane {
+            display: none;
+        }
+
+      .form-pane.active {
+            display: block;
+        }
+
+      .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+      .form-group label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+      .form-control {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 0.9rem 1.2rem;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+      .form-control:focus {
+            background: rgba(255, 255, 255, 0.85);
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.1);
+        }
+
+      .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-green), #43a047);
+            color: #ffffff;
+            border: none;
+            padding: 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.2);
+        }
+
+      .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(46, 125, 50, 0.3);
+        }
+
+      .error-msg {
+            color: #d32f2f;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            text-align: center;
+            display: none;
+        }
+
+      .success-msg {
+            color: var(--primary-green);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            text-align: center;
+            display: none;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+          .auth-card { padding: 2rem 1.5rem; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 1rem; }
+          .auth-card { padding: 1.5rem 1.25rem; }
+            header { padding: 0.75rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand">🌾 <span data-key="brand">Smart Agri</span></div>
+        <button class="lang-btn" id="langToggle">தமிழ்</button>
+    </header>
+
+    <div class="auth-card">
+        <div class="tab-group">
+            <button class="tab-btn active" id="tabLogin" data-key="tabLogin">Login</button>
+            <button class="tab-btn" id="tabSignup" data-key="tabSignup">Signup</button>
+        </div>
+
+        <div class="form-pane active" id="loginPane">
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginUser" data-key="lblUser">Username</label>
+                    <input type="text" id="loginUser" class="form-control" required placeholder="Enter your username">
+                </div>
+                <div class="form-group">
+                    <label for="loginPass" data-key="lblPass">Password</label>
+                    <input type="password" id="loginPass" class="form-control" required placeholder="Enter password">
+                </div>
+                <p class="error-msg" id="loginError"></p>
+                <button type="submit" class="btn-submit" data-key="btnLogin">Sign In</button>
+            </form>
+        </div>
+
+        <div class="form-pane" id="signupPane">
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="signUpName" data-key="lblName">Full Name</label>
+                    <input type="text" id="signUpName" class="form-control" required placeholder="Enter full name">
+                </div>
+                <div class="form-group">
+                    <label for="signUpUser" data-key="lblUser">Username</label>
+                    <input type="text" id="signUpUser" class="form-control" required placeholder="Choose a username">
+                </div>
+                <div class="form-group">
+                    <label for="signUpPass" data-key="lblPassCreate">Create Password</label>
+                    <input type="password" id="signUpPass" class="form-control" required placeholder="Create password">
+                </div>
+                <p class="success-msg" id="signupSuccess"></p>
+                <button type="submit" class="btn-submit" data-key="btnRegister">Register Now</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const dictionary = {
+            en: {
+                brand: "Smart Agri",
+                tabLogin: "Login",
+                tabSignup: "Signup",
+                lblUser: "Username",
+                lblPass: "Password",
+                lblName: "Full Name",
+                lblPassCreate: "Create Password",
+                btnLogin: "Sign In",
+                btnRegister: "Register Now",
+                accountNotFound: "Account not found. Please sign up first!",
+                signupSuccess: "You signed up successfully! Please login.",
+                invalidCreds: "Invalid username or password",
+                fillAll: "Please fill all fields"
+            },
+            ta: {
+                brand: "உழவன்உதவி",
+                tabLogin: "உள்நுழைவு",
+                tabSignup: "பதிவு செய்ய",
+                lblUser: "பயனர் பெயர்",
+                lblPass: "கடவுச்சொல்",
+                lblName: "முழு பெயர்",
+                lblPassCreate: "புதிய கடவுச்சொல்",
+                btnLogin: "உள்நுழைக",
+                btnRegister: "பதிவு செய்",
+                accountNotFound: "கணக்கு இல்லை. முதலில் பதிவு செய்யுங்கள்!",
+                signupSuccess: "வெற்றிகரமாக பதிவு செய்தீர்கள்! உள்நுழையவும்.",
+                invalidCreds: "தவறான பயனர் பெயர் அல்லது கடவுச்சொல்",
+                fillAll: "அனைத்து புலங்களையும் நிரப்பவும்"
+            }
+        };
+
+        let currentLang = 'en';
+
+        function applyTranslations() {
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (dictionary[currentLang][key]) {
+                    el.textContent = dictionary[currentLang][key];
+                }
+            });
+            document.getElementById('langToggle').textContent = currentLang === 'en'? 'தமிழ்' : 'English';
+        }
+
+        document.getElementById('langToggle').addEventListener('click', () => {
+            currentLang = currentLang === 'en'? 'ta' : 'en';
+            localStorage.setItem('farmerLang', currentLang);
+            applyTranslations();
+        });
+
+        if(localStorage.getItem('farmerLang')) {
+            currentLang = localStorage.getItem('farmerLang');
+            applyTranslations();
+        }
+
+        const tabLogin = document.getElementById('tabLogin');
+        const tabSignup = document.getElementById('tabSignup');
+        const loginPane = document.getElementById('loginPane');
+        const signupPane = document.getElementById('signupPane');
+
+        tabLogin.addEventListener('click', () => {
+            tabLogin.classList.add('active');
+            tabSignup.classList.remove('active');
+            loginPane.classList.add('active');
+            signupPane.classList.remove('active');
+            hideMessages();
+        });
+
+        tabSignup.addEventListener('click', () => {
+            tabSignup.classList.add('active');
+            tabLogin.classList.remove('active');
+            signupPane.classList.add('active');
+            loginPane.classList.remove('active');
+            hideMessages();
+        });
+
+        function hideMessages() {
+            document.getElementById('loginError').style.display = 'none';
+            document.getElementById('signupSuccess').style.display = 'none';
+        }
+
+        // SIGNUP LOGIC
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('signUpName').value.trim();
+            const username = document.getElementById('signUpUser').value.trim();
+            const password = document.getElementById('signUpPass').value;
+            const successMsg = document.getElementById('signupSuccess');
+
+            if (!name ||!username ||!password) {
+                successMsg.textContent = dictionary[currentLang].fillAll;
+                successMsg.style.display = 'block';
+                successMsg.style.color = '#d32f2f';
+                return;
+            }
+
+            localStorage.setItem('farmerFullName', name);
+            localStorage.setItem('farmerUsername', username);
+            localStorage.setItem('farmerPassword', password);
+
+            successMsg.textContent = dictionary[currentLang].signupSuccess;
+            successMsg.style.display = 'block';
+            successMsg.style.color = '#2e7d32';
+
+            document.getElementById('signupForm').reset();
+
+            setTimeout(() => {
+                tabLogin.click();
+            }, 1500);
+        });
+
+        // LOGIN LOGIC - ADMIN CHECK ADDED
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('loginUser').value.trim();
+            const password = document.getElementById('loginPass').value;
+            const errorMsg = document.getElementById('loginError');
+
+            // 1. ADMIN CHECK - Mudhala idha check pannum
+            if (username === 'Admin' && password === 'Admin@124') {
+                window.location.href = 'admin.html';
+                return;
+            }
+
+            // 2. Check if normal user signed up
+            const savedUser = localStorage.getItem('farmerUsername');
+            const savedPass = localStorage.getItem('farmerPassword');
+
+            if (!savedUser ||!savedPass) {
+                errorMsg.textContent = dictionary[currentLang].accountNotFound;
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            // 3. Check if credentials match signup data
+            if (username === savedUser && password === savedPass) {
+                window.location.href = 'user.html';
+            } else {
+                errorMsg.textContent = dictionary[currentLang].invalidCreds;
+                errorMsg.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
+

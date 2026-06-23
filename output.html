@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmerHelper - Crop Optimization Report</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #f1f8e9 100%);
+            --glass-bg: rgba(255, 255, 255, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.45);
+            --primary-green: #2e7d32;
+            --accent-yellow: #fffde7;
+            --accent-orange: #ffe082;
+            --danger-red: #ffcdd2;
+            --text-main: #1b5e20;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--bg-gradient); color: var(--text-main); min-height: 100vh; padding: 2rem 1rem; }
+        
+        .container { max-width: 1100px; margin: 0 auto; }
+        
+        header {
+            background: rgba(255,255,255,0.6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border); border-radius: 16px; padding: 1rem 1.5rem;
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;
+        }
+
+        .nav-links { display: flex; gap: 1rem; }
+        .nav-btn { background: #ffffff; color: var(--primary-green); border: 1px solid var(--glass-border); padding: 0.5rem 1rem; border-radius: 12px; font-weight:600; text-decoration:none; transition:0.3s; }
+        .nav-btn:hover { background: var(--primary-green); color: white; }
+
+        .report-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; }
+        
+        .glass-card {
+            background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border); border-radius: 20px; padding: 2rem;
+            box-shadow: 0 8px 32px 0 rgba(0,0,0,0.04); animation: fadeInUp 0.5s ease-out;
+        }
+        
+        .full-width { grid-column: 1 / -1; }
+        h2 { margin-bottom: 1.25rem; font-size: 1.25rem; display: flex; align-items: center; gap: 0.5rem; }
+
+        ul { list-style-position: inside; margin-left: 0.5rem; }
+        li { margin-bottom: 0.5rem; line-height: 1.5; }
+
+        .warning-box { background: var(--danger-coral); padding: 1rem; border-radius: 12px; margin-bottom: 1rem; border: 1px solid #ef9a9a; }
+        
+        .weather-widget { display: flex; gap: 1rem; justify-content: space-between; text-align: center; margin-top: 1rem; }
+        .weather-day { background: rgba(255,255,255,0.4); padding: 0.75rem; border-radius: 12px; flex: 1; }
+
+        @keyframes fadeInUp { from { opacity:0; transform:translateY(15px); } to { opacity:1; transform:translateY(0); } }
+        
+        @media (max-width: 768px) { .report-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div style="font-weight:700; font-size: 1.2rem;">🌾 FarmerHelper Report</div>
+            <div class="nav-links">
+                <a href="queries.html" class="nav-btn" id="lnkDoubt">Ask a Doubt</a>
+                <button class="nav-btn" id="langToggle">தமிழ்</button>
+            </div>
+        </header>
+
+        <div class="report-grid">
+            
+            <div class="glass-card full-width" style="background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(200,230,201,0.5));">
+                <h2 style="font-size: 1.6rem;"><span id="metaCropIcon">🌾</span> <span id="metaCropName">Paddy / Rice</span> Analysis Report</h2>
+                <p style="font-size: 1.1rem; line-height: 1.6;">
+                    Targeting <strong><span id="metaAcres">5</span> Acres</strong> within <strong><span id="metaDistrict">Thanjavur</span> District</strong>. 
+                    Calculated Crop Suitability Index Level is at <strong style="color:var(--primary-green); font-size: 1.2rem;"><span id="metaRate">94%</span></strong>.
+                </p>
+            </div>
+
+            <div class="glass-card">
+                <h2>🍃 <span data-key="titleOrganic">Organic Fertilizers</span></h2>
+                <ul>
+                    <li>Panchagavya Foliar Spray (3% liquid solution execution)</li>
+                    <li>Vermicompost high nitrogen base layering (2.5 tonnes/acre)</li>
+                    <li>Neem Cake extract applications for root reinforcement</li>
+                    <li>Azospirillum bio-fertilizer seed inoculation management</li>
+                </ul>
+            </div>
+
+            <div class="glass-card">
+                <h2>🤖 <span data-key="titleTech">Modern Technology Suggestions</span></h2>
+                <ul>
+                    <li>IoT Soil Moisture Probes for scheduling water delivery</li>
+                    <li>Drone-based spectral imaging to detect localized nitrogen decay</li>
+                    <li>Automated solar-powered micro-drip manifold setups</li>
+                    <li>AI-driven alternate wetting and drying watering schedules</li>
+                </ul>
+            </div>
+
+            <div class="glass-card">
+                <h2 style="color: #c62828;">⚠️ <span data-key="titleDos">Do's & Don'ts Safety Warnings</span></h2>
+                <div style="display:flex; flex-direction:column; gap:0.5rem;">
+                    <div class="warning-box" style="background: rgba(200,230,201,0.5); border-color:#a5d6a7;">
+                        <strong>Do:</strong> Maintain consistent shallow flooding (2-5cm) throughout the active vegetative state.
+                    </div>
+                    <div class="warning-box" style="background: rgba(255,205,210,0.5); border-color:#ef9a9a;">
+                        <strong>Don't:</strong> Avoid using synthetic urea options continuously during hyper-monsoon sequences.
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <h2>🧪 <span data-key="titleSoil">Soil Testing Protocols</span></h2>
+                <ol style="margin-left:1.25rem; line-height: 1.6;">
+                    <li>Collect grid samples across a depth profile of 15-30cm.</li>
+                    <li>Mix samples together thoroughly within an organic container.</li>
+                    <li>Dry completely under partial shade environments.</li>
+                    <li>Submit directly to your nearest block research laboratory extension.</li>
+                </ol>
+            </div>
+
+            <div class="glass-card">
+                <h2>🏛️ <span data-key="titleGovt">Eligible Government Subsidies</span></h2>
+                <ul>
+                    <li><strong>PM-KISAN:</strong> Direct support allocation access of ₹6,000 baseline matching records.</li>
+                    <li><strong>TN Micro-Irrigation Scheme:</strong> 100% full financial aid for marginal setups.</li>
+                    <li><strong>PMFBY Crop Insurance:</strong> Specialized seasonal cover matching localized climate stress profiles.</li>
+                </ul>
+            </div>
+
+            <div class="glass-card">
+                <h2>☀️ <span data-key="titleWeather">District Climate Conditions</span></h2>
+                <p><span data-key="lblCurrent">Current Forecast:</span> <strong>31°C - Scattered Clouds</strong></p>
+                <div class="weather-widget">
+                    <div class="weather-day"><div>Thu</div><div>32°C</div><div>⛅</div></div>
+                    <div class="weather-day"><div>Fri</div><div>30°C</div><div>🌧️</div></div>
+                    <div class="weather-day"><div>Sat</div><div>29°C</div><div>🌧️</div></div>
+                </div>
+            </div>
+
+            <div class="glass-card full-width">
+                <h2>💰 <span data-key="titleSelling">Commercialization & Processing Strategies</span></h2>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
+                    <div>
+                        <h3 style="font-size:1rem; margin-bottom:0.5rem; font-weight:600;">Direct Selling Methods</h3>
+                        <p style="font-size:0.9rem; line-height:1.5; color:#33691e;">Connect your output profiles with dynamic local e-NAM endpoints or process direct supply configurations to localized processing hubs bypassing intermediary groups.</p>
+                    </div>
+                    <div>
+                        <h3 style="font-size:1rem; margin-bottom:0.5rem; font-weight:600;">Value-Added Product Processing Ideas</h3>
+                        <p style="font-size:0.9rem; line-height:1.5; color:#33691e;">Process raw yields into premium packaging options, organic rice flour, cold-pressed bran extracts, or multi-grain mixes to capture up to 4x localized wholesale value metrics.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const dictionary = {
+            en: {
+                titleOrganic: "Organic Fertilizers", titleTech: "Modern Technology Suggestions",
+                titleDos: "Do's & Don'ts Safety Warnings", titleSoil: "Soil Testing Protocols",
+                titleGovt: "Eligible Government Subsidies", titleWeather: "District Climate Conditions",
+                titleSelling: "Commercialization & Processing Strategies", lblCurrent: "Current Forecast:",
+                lnkDoubt: "Ask a Doubt"
+            },
+            ta: {
+                titleOrganic: "இயற்கை உரங்கள்", titleTech: "நவீன தொழில்நுட்ப முறைகள்",
+                titleDos: "செய்ய வேண்டியவை & செய்யக்கூடாதவை", titleSoil: "மண் பரிசோதனை முறைகள்",
+                titleGovt: "அரசு மானியங்கள் மற்றும் உதவிகள்", titleWeather: "மாவட்ட வானிலை நிலவரம்",
+                titleSelling: "விற்பனை மற்றும் மதிப்பு கூட்டு பொருட்கள்", lblCurrent: "தற்போதைய வானிலை:",
+                lnkDoubt: "சந்தேகம் கேட்க"
+            }
+        };
+
+        let currentLang = localStorage.getItem('farmerLang') || 'en';
+
+        function applyTranslations() {
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (dictionary[currentLang][key]) el.textContent = dictionary[currentLang][key];
+            });
+            document.getElementById('langToggle').textContent = currentLang === 'en' ? 'தமிழ்' : 'English';
+            document.getElementById('lnkDoubt').textContent = dictionary[currentLang]['lnkDoubt'];
+            
+            // Map parameters cleanly matching cached target selection profiles
+            const cropName = currentLang === 'en' ? localStorage.getItem('selectedCropEn') : localStorage.getItem('selectedCropTa');
+            if (cropName) document.getElementById('metaCropName').textContent = cropName;
+        }
+
+        document.getElementById('langToggle').addEventListener('click', () => {
+            currentLang = currentLang === 'en' ? 'ta' : 'en';
+            localStorage.setItem('farmerLang', currentLang);
+            applyTranslations();
+        });
+
+        // Initialize and bind static system data strings from local storage properties
+        if(localStorage.getItem('selectedCropIcon')) document.getElementById('metaCropIcon').textContent = localStorage.getItem('selectedCropIcon');
+        if(localStorage.getItem('selectedAcres')) document.getElementById('metaAcres').textContent = localStorage.getItem('selectedAcres');
+        if(localStorage.getItem('selectedDistrict')) document.getElementById('metaDistrict').textContent = localStorage.getItem('selectedDistrict');
+        if(localStorage.getItem('selectedCropRate')) document.getElementById('metaRate').textContent = localStorage.getItem('selectedCropRate');
+
+        applyTranslations();
+    </script>
+</body>
+</html>
